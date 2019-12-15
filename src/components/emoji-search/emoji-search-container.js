@@ -1,6 +1,6 @@
 import React from 'react';
 import EmojiSearch from './emoji-search-view.js';
-import { searchEmojis } from './utils';
+import {searchEmojis} from './utils';
 import copy from 'copy-to-clipboard';
 
 const DEFAULT_LIMIT = 100;
@@ -10,19 +10,23 @@ class EmojiSearchContainer extends React.Component {
     filteredEmojis: searchEmojis('', DEFAULT_LIMIT),
     searchTerm: '',
     limit: DEFAULT_LIMIT,
+    selectedEmoji: null,
+  };
+
+  selectEmoji = emoji => {
+    this.setState({selectedEmoji: emoji || null});
   };
 
   onSearchTermChange = searchTerm => {
     const filteredEmojis = searchEmojis(searchTerm, this.state.limit);
-    this.setState({ searchTerm, filteredEmojis })
-  }
+    this.selectEmoji(filteredEmojis[0]);
+    this.setState({searchTerm, filteredEmojis});
+  };
 
   onSearchSubmit = () => {
-    const emoji = this.state.filteredEmojis[0];
-    if (emoji) {
-      copy(emoji.symbol);
-    }
-  }
+    const {selectedEmoji} = this.state;
+    if (selectedEmoji) copy(selectedEmoji.symbol);
+  };
 
   render() {
     return (
@@ -31,6 +35,8 @@ class EmojiSearchContainer extends React.Component {
         onSearchTermChange={this.onSearchTermChange}
         filteredEmojis={this.state.filteredEmojis}
         onSearchSubmit={this.onSearchSubmit}
+        selectedEmoji={this.state.selectedEmoji}
+        selectEmoji={this.selectEmoji}
       />
     );
   }

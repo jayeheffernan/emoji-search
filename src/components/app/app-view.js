@@ -6,7 +6,7 @@ import Header from '../header';
 
 function App() {
   return (
-    <div className="App container-md">
+    <div className="App container-sm">
       <Header />
       <EmojiSearch />
     </div>
